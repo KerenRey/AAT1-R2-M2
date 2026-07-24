@@ -123,13 +123,25 @@
   </section>
 
   <!-- CTA SECTION -->
+<!-- CTA SECTION -->
   <section class="cta-section">
     <div class="cta-content">
-      <h2>¡Empieza tu viaje ahora!</h2>
+      
+      <!-- Este div junta el TÍTULO y el BOTÓN en la misma línea -->
+      <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 15px;">
+        <h2 style="margin: 0;">¡Empieza tu viaje ahora!</h2>
+        
+        <a routerLink="/comprar-boletos" class="btn btn-primary btn-large">
+          Comprar boletos 🎟️
+        </a>
+      </div>
+
       <p>Explora todos los países del mundo con información actualizada y detallada.</p>
+      
       <a routerLink="/PageListaPaises" class="btn btn-primary btn-large">
         Ver todos los países 🌍
       </a>
+      
     </div>
   </section>
 

@@ -1,0 +1,38 @@
+<h2>Buscar país </h2>
+<input type="text" #txtPais placeholder="Escribe un país para buscar">
+
+<button type="button" (click)="buscar(txtPais.value)">
+  Buscar
+</button>
+
+<br><br>
+@for (pais of countries(); track $index) {
+<div class="card" style="border: 1px solid #ccc; padding: 15px; margin-bottom: 15px; border-radius: 8px;">
+
+  <!-- 1. BANDERA -->
+  @if (pais.flag?.url_png || pais.flag?.url_svg) {
+  <img [src]="pais.flag?.url_png ?? pais.flag?.url_svg" [alt]="pais.names?.common"
+    style="width: 120px; height: auto; border: 1px solid #ddd; border-radius: 4px;">
+  }
+
+  <!-- 2. NOMBRE -->
+  <h2>
+    {{ pais.names?.translations?.spa?.common ?? pais.names?.common ?? 'Sin Nombre' }}
+  </h2>
+
+  <!-- 3. CAPITAL -->
+  <p>
+    <strong>Capital:</strong>
+    {{ pais.capitals?.[0]?.name ?? 'No disponible' }}
+  </p>
+
+  <!-- 4. CONTINENTE -->
+  <p>
+    <strong>Continente:</strong>
+    {{ pais.continents?.[0] ?? pais.region ?? 'No disponible' }}
+  </p>
+
+</div>
+} @empty {
+<p>No se encontraron países.</p>
+}

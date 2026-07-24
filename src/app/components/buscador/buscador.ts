@@ -1,9 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-buscador',
+  standalone: true,
   imports: [],
   templateUrl: './buscador.html',
-  styleUrl: './buscador.css',
+  styleUrls: ['./buscador.css']
 })
-export class Buscador {}
+export class BuscadorComponent {
+
+  @Output() terminoBusqueda = new EventEmitter<string>();
+
+  onBuscar(event: any) {
+    const texto = event.target.value;
+    this.terminoBusqueda.emit(texto);
+  }
+}

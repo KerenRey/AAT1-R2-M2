@@ -68,6 +68,16 @@
     <h2>Países Destacados</h2>
     <p class="section-subtitle">Datos en tiempo real desde la API de países</p>
 
+    <!-- BARRA DE BÚSQUEDA -->
+    <div class="search-container" style="margin: 20px auto; text-align: center; max-width: 500px;">
+      <input 
+        type="text" 
+        placeholder="Buscar país... ej: México, Francia, Japón" 
+        (input)="buscarPais($event)"
+        style="width: 100%; padding: 12px 20px; border-radius: 30px; border: 1px solid #ccc; font-size: 16px; outline: none; box-shadow: 0 2px 5px rgba(0,0,0,0.1);"
+      />
+    </div>
+
     @if (cargando()) {
       <div class="loading">
         <div class="spinner"></div>
@@ -83,6 +93,7 @@
             <div class="country-info">
               <h3>{{ pais.names.common }}</h3>
               <p class="country-capital">
+                <!-- Línea corregida aquí -->
                 Capital: {{ pais.capitals?.[0]?.name ?? 'Sin capital' }}
               </p>
               <p class="country-population">
@@ -91,6 +102,10 @@
               <span class="country-region">{{ pais.region }}</span>
             </div>
             <a [routerLink]="['/pais', pais.names.common]" class="country-link">Ver más</a>
+          </div>
+        } @empty {
+          <div class="no-results" style="text-align: center; width: 100%; padding: 40px; color: #ff4d4d; grid-column: 1 / -1;">
+            <p>No se encontraron resultados.</p>
           </div>
         }
       </div>

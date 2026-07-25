@@ -19,7 +19,9 @@ interface ApiV5Response {
 })
 export class ServicioPaises {
   private http = inject(HttpClient);
-  private apiUrl = '/api/countries/v5';
+  
+  // URL absoluta oficial conectada directamente de forma externa
+  private apiUrl = 'https://restcountries.com';
   private token = 'rc_live_0f9a757f945c4fab9ae7163df3179793';
 
   private getHeaders(): HttpHeaders {
@@ -33,7 +35,7 @@ export class ServicioPaises {
       `${this.apiUrl}?limit=250&fields=names,capitals,region,population,flag,codes`,
       { headers: this.getHeaders() }
     ).pipe(
-      map(res => res.data.objects)
+      map(res => res.data?.objects || [])
     );
   }
 
@@ -42,7 +44,7 @@ export class ServicioPaises {
       `${this.apiUrl}?q=${encodeURIComponent(nombre)}&fields=names,capitals,region,population,flag,codes`,
       { headers: this.getHeaders() }
     ).pipe(
-      map(res => res.data.objects)
+      map(res => res.data?.objects || [])
     );
   }
 
@@ -51,19 +53,19 @@ export class ServicioPaises {
       `${this.apiUrl}?region=${encodeURIComponent(region)}&limit=250&fields=names,capitals,region,population,flag,codes`,
       { headers: this.getHeaders() }
     ).pipe(
-      map(res => res.data.objects)
+      map(res => res.data?.objects || [])
     );
   }
 
   getPaisesDestacados(): Observable<ModeloPaises[]> {
-    // forkJoin con búsqueda individual por nombre — la API v5 no soporta ?codes=
     const nombres = ['Mexico', 'France', 'Japan', 'Brazil', 'South Africa', 'Australia'];
     const peticiones = nombres.map(nombre =>
       this.http.get<ApiV5Response>(
         `${this.apiUrl}?q=${encodeURIComponent(nombre)}&limit=1&fields=names,capitals,region,population,flag,codes`,
         { headers: this.getHeaders() }
       ).pipe(
-        map(res => res.data.objects[0]),
+        // EXTRACCIÓN CORREGIDA: Devuelve el objeto individual país o null
+        map(res => (res.data?.objects && res.data.objects.length > 0) ? res.data.objects[0] : null),
         catchError(() => of(null))
       )
     );
@@ -73,15 +75,14 @@ export class ServicioPaises {
   }
 
   getPorCodigo(nombreOCodigo: string): Observable<ModeloPaises | null> {
-    // La API v5 no tiene endpoint individual por código.
-    // Buscamos por nombre (decodificado de URL) y tomamos el primer resultado.
     const nombre = decodeURIComponent(nombreOCodigo);
     return this.http.get<ApiV5Response>(
       `${this.apiUrl}?q=${encodeURIComponent(nombre)}&fields=names,capitals,region,subregion,population,flag,codes,area,languages,currencies,continents,borders,classification,links`,
       { headers: this.getHeaders() }
     ).pipe(
       map(res => {
-        if (!res.data.objects || res.data.objects.length === 0) return null;
+        // EXTRACCIÓN CORREGIDA: Devuelve el objeto individual del país para la vista detalle
+        if (!res.data || !res.data.objects || res.data.objects.length === 0) return null;
         return res.data.objects[0];
       }),
       catchError(() => of(null))

@@ -20,7 +20,7 @@ interface ApiV5Response {
 export class ServicioPaises {
   private http = inject(HttpClient);
   private apiUrl = '/api/countries/v5';
-  private token = 'rc_live_5e204e0a7f9547ff93e6f3c254ae6f37';
+  private token = 'rc_live_3f376d543ff443f8b3105c2cfdcf9c48';
 
   private getHeaders(): HttpHeaders {
   const headers = new HttpHeaders({
